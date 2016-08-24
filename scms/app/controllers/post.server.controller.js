@@ -54,6 +54,20 @@ var getDeleteIdFromMongo = function(req, id, cb) {
   });
 };
 
+var getUpdateIdFromMongo = function(req, id ,cb) {
+  console.log('run getUpdateIdFromMongo');
+  var message = {
+    title: req.body.title,
+    content: req.body.content
+  }
+  req.models.post.update({id: id}, message).exec(function(err, doc) {
+    if(err) {
+      return next(err);
+    }
+    return res.json(doc);
+  });
+};
+
 module.exports = {
   create: function(req, res, next) {
     var message = {
@@ -75,7 +89,6 @@ module.exports = {
       return res.json(docs);
     });
   },
-
   
   // 处理'详情'路由参数
   getById: function(req, res, next, id){
@@ -106,12 +119,27 @@ module.exports = {
   getDelId: function(req, res, next, id) {
     // console.log('getDelId:',id);
     if(!id) {
-      return next(new Error('DelNews not Found'));
+      return next(new Error('DeleteNews not Found'));
     }
     getDeleteIdFromMongo(req, id, function(err) {
       if(err) {
         return next(err);
       }
+      return next();
+    });
+  },
+
+  //处理'更新'路由参数
+  getUpdateId: function(req, res, next, id) {
+    // console.log('getUpdateId:',id);
+    if(!id) {
+      return next(new Error('UpdateNews not Found'));
+    }
+    getUpdateIdFromMongo(req, id, function(err) {
+      if(err) {
+        return next(err);
+      }
+      // req.news = doc;
       return next();
     });
   },
@@ -124,9 +152,15 @@ module.exports = {
 
   //删除一条新闻
   delete: function(req, res, next) {
-    req.news = "Delete new success!";
-    console.log('delnew:',req.news)
+    req.news = "Delete news success!";
+    // console.log('delnew:',req.news)
     return res.json(req.news);
+  },
+
+  //更新一条新闻
+  update: function(req, res, next) {
+    req.news = "Update news success!";
+    return res.json(req,news);
   }
 }
 

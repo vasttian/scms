@@ -36,6 +36,9 @@ function NewsService($http, $q) {
     },
     delete: function(id) {
       return handleRequest('GET', '/deletenews/' + id);
+    },
+    update: function(id, data) {
+      return handleRequest('POST', '/update/' + id, data);
     }
   }
 }

@@ -18,10 +18,13 @@ module.exports = function(app){
   //参数只有通过验证才能继续
   app.param('nid', PostController.getById);
   app.param('did', PostController.getDelId);
+  app.param('uid', PostController.getUpdateId);
 
   app.route('/news/:nid')
      .get(PostController.get);
   app.route('/deletenews/:did')
      .get(PostController.delete);
+  app.route('/update')
+     .post(PostController.update);
   // app.param('nid', NewsController.getById);
 };
