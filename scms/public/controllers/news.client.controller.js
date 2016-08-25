@@ -92,7 +92,7 @@ function NewsController($scope, NewsService) {
   };
 
   $scope.formatTime = function(time){
-    return moment(time).format('l');
+    return moment(time).format('YYYY-MM-DD HH:mm:ss');
   };
 
   $scope.loadNews = function() {
