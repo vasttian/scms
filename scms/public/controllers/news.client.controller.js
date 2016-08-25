@@ -6,6 +6,8 @@ function NewsController($scope, NewsService) {
   $scope.current = {};
   $scope.new = {};
   $scope.id = [];
+  $scope.chk = false;
+  var id = "";
   $scope.save = function() {
     if(!$scope.new.title) {
       $scope.editorMessage = 'Title is required';
@@ -57,8 +59,8 @@ function NewsController($scope, NewsService) {
 
   $scope.openNewsDetail = function(id) {
     $scope.loadDetail(id);
-    console.log('openNewsDetailTitle:',$scope.current.title);
-    console.log('openNewsDetailContent:',$scope.current.content);
+    // console.log('openNewsDetailTitle:',$scope.current.title);
+    // console.log('openNewsDetailContent:',$scope.current.content);
     $("#modal-detail").modal('show');
   };
 
@@ -98,13 +100,52 @@ function NewsController($scope, NewsService) {
   $scope.loadNews = function() {
     NewsService.list().then(
       function(data){
-        console.log('data:');
-        console.log(data);
+        // console.log('data:');
+        // console.log(data);
         $scope.list = data;
+        var MesId = [];
+        for(var i = 0; i < $scope.list.length; i++) {
+          MesId[i] = $scope.list[i].id;
+        }
+        $scope.mesId = MesId;
+        // console.log('mesId:',$scope.mesId);
       },
       function(err){}
       );
   };
+
+  $scope.check = function(cid, chk) {
+    // console.log('val:',val);
+    // console.log('chk:',chk);
+    var val = $scope.mesId[cid];
+    if(chk) {
+      id += val+",";
+    }
+    else {
+      // 替换选中后再次未选中
+      id = id.replace(val+",",""); 
+    }
+    console.log('checkedId:',id);
+  };
+
+  $scope.checkAll = function() {
+    id = "";
+    for(var i = 0; i < $scope.mesId.length; i++) {
+      var val = $scope.mesId[i];
+      id += val+",";
+      $scope.chk = true;
+    }
+    console.log('allId:',id);
+  };
+
+  $scope.mulDelete = function() {
+    var chkId = id.split(",");
+    var firstId = chkId.pop();//删除分割后的数组的最后一个空元素
+    console.log('chkId:',chkId);
+    for(var i = 0; i < chkId.length; i++) {
+      $scope.deleteNews(chkId[i]);
+    }
+  }
 
   $scope.loadNews();
 }
