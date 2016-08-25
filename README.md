@@ -1,4 +1,11 @@
 # scms
-a simple system manage, gradually perfect
+A simple message management system, perfecting the late
 
 一个简单的消息管理系统，基于node.js 使用 waterline 实现了基本的增删改查。
+
+1.首先 npm install 重新编译一下项目模块
+2.node bin/www 启动即可在
+url：127.0.0.1:7101 查看这个简单的项目，
+当然为了性能考虑：
+Update功能其实应该之更新当前一个消息，处于时间考虑，这个项目还并没有实现这个功能，后续有时间会修改！
+
