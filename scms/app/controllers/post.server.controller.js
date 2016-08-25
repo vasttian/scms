@@ -31,7 +31,8 @@ var getNewsFromMongo = function(req, id, cb) {
 var getNewsFromRedis = function(req, id, cb) {
   console.log('run getNewsFromRedis');
   redisClient.get(REDIS_NEWS_PREFIX + id, function(err, v) {
-    if(err) return cb(err, null);
+    if(err) 
+      return cb(err, null);
     if(!v) {
       console.log('doc not in redis');
       return cb(null, null);
@@ -49,6 +50,7 @@ var getNewsFromRedis = function(req, id, cb) {
 var getDeleteIdFromMongo = function(req, id, cb) {
   console.log('run getDeleteIdFromMongo');
   // console.log('find_MongoId:',id);
+  redisClient.del(REDIS_NEWS_PREFIX + id);
   req.models.post.destroy({id: id}).exec(function(err) {
     return cb(null);
   });
@@ -60,11 +62,13 @@ var getUpdateIdFromMongo = function(req, id ,cb) {
     title: req.body.title,
     content: req.body.content
   }
+  redisClient.del(REDIS_NEWS_PREFIX + id);
+  redisClient.set(REDIS_NEWS_PREFIX + id, JSON.stringify(message));
   req.models.post.update({id: id}, message).exec(function(err, doc) {
     if(err) {
       return next(err);
     }
-    return res.json(doc);
+    // res.json(doc);
   });
 };
 
@@ -92,7 +96,7 @@ module.exports = {
   
   // 处理'详情'路由参数
   getById: function(req, res, next, id){
-    // console.log('getById:',id);
+    console.log('getById:',id);
     if(!id) return next(new Error('News not Found'));
     getNewsFromRedis(req, id, function(err, doc){
       if(err) return next(err);
@@ -131,7 +135,7 @@ module.exports = {
 
   //处理'更新'路由参数
   getUpdateId: function(req, res, next, id) {
-    // console.log('getUpdateId:',id);
+    console.log('getUpdateId:',id);
     if(!id) {
       return next(new Error('UpdateNews not Found'));
     }
@@ -163,4 +167,3 @@ module.exports = {
     return res.json(req,news);
   }
 }
-

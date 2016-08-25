@@ -1,7 +1,5 @@
 angular.module('webapp')
 .service("NewsService", ["$http", "$q", NewsService]);
-
-
 function NewsService($http, $q) {
   function handleRequest(method, url, data) {
     var defered = $q.defer();
@@ -15,7 +13,8 @@ function NewsService($http, $q) {
     } else if('GET' === method) {
       config.params = data;
     }
-    // console.log('config:',config);
+    console.log('config:',config);
+    // console.log('data:',data);
     $http(config).success(function(data) {
       defered.resolve(data);
     }).error(function(err) {

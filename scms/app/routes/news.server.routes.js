@@ -1,6 +1,5 @@
 var NewsController = require('../controllers/news.server.controller');
 var PostController = require('../controllers/post.server.controller');
-
 module.exports = function(app){
 
   app.route('/news')
@@ -24,7 +23,7 @@ module.exports = function(app){
      .get(PostController.get);
   app.route('/deletenews/:did')
      .get(PostController.delete);
-  app.route('/update')
+  app.route('/update/:uid')
      .post(PostController.update);
   // app.param('nid', NewsController.getById);
 };
