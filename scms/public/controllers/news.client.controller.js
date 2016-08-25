@@ -67,7 +67,7 @@ function NewsController($scope, NewsService) {
   $scope.deleteNews = function(id) {
     NewsService.delete(id).then(
       function(data) {
-        console.log('delete success');
+        // console.log('delete success');
         //$scope.current = data;
         $scope.loadNews();
       },
@@ -125,7 +125,7 @@ function NewsController($scope, NewsService) {
       // 替换选中后再次未选中
       id = id.replace(val+",",""); 
     }
-    console.log('checkedId:',id);
+    // console.log('checkedId:',id);
   };
 
   $scope.checkAll = function() {
@@ -135,13 +135,13 @@ function NewsController($scope, NewsService) {
       id += val+",";
       $scope.chk = true;
     }
-    console.log('allId:',id);
+    // console.log('allId:',id);
   };
 
   $scope.mulDelete = function() {
     var chkId = id.split(",");
     var firstId = chkId.pop();//删除分割后的数组的最后一个空元素
-    console.log('chkId:',chkId);
+    // console.log('chkId:',chkId);
     for(var i = 0; i < chkId.length; i++) {
       $scope.deleteNews(chkId[i]);
     }
