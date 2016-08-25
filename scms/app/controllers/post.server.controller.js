@@ -65,10 +65,12 @@ var getUpdateIdFromMongo = function(req, id ,cb) {
   redisClient.del(REDIS_NEWS_PREFIX + id);
   redisClient.set(REDIS_NEWS_PREFIX + id, JSON.stringify(message));
   req.models.post.update({id: id}, message).exec(function(err, doc) {
+    // console.log('err:',err);
+    // console.log('doc:',doc);
     if(err) {
       return next(err);
     }
-    // res.json(doc);
+    return cb(err, doc);
   });
 };
 
@@ -96,7 +98,7 @@ module.exports = {
   
   // 处理'详情'路由参数
   getById: function(req, res, next, id){
-    console.log('getById:',id);
+    // console.log('getById:',id);
     if(!id) return next(new Error('News not Found'));
     getNewsFromRedis(req, id, function(err, doc){
       if(err) return next(err);
@@ -123,7 +125,7 @@ module.exports = {
   getDelId: function(req, res, next, id) {
     // console.log('getDelId:',id);
     if(!id) {
-      return next(new Error('DeleteNews not Found'));
+      return next(new Error('DeleteNews not Found!'));
     }
     getDeleteIdFromMongo(req, id, function(err) {
       if(err) {
@@ -135,15 +137,16 @@ module.exports = {
 
   //处理'更新'路由参数
   getUpdateId: function(req, res, next, id) {
-    console.log('getUpdateId:',id);
+    // console.log('getUpdateId:',id);
     if(!id) {
-      return next(new Error('UpdateNews not Found'));
+      return next(new Error('UpdateNews not Found!'));
     }
-    getUpdateIdFromMongo(req, id, function(err) {
+    getUpdateIdFromMongo(req, id, function(err, doc) {
       if(err) {
         return next(err);
       }
-      // req.news = doc;
+      // console.log('updateDoc:',doc);
+      req.news = doc;
       return next();
     });
   },
@@ -163,7 +166,7 @@ module.exports = {
 
   //更新一条新闻
   update: function(req, res, next) {
-    req.news = "Update news success!";
-    return res.json(req,news);
+    // req.news = "Update news success!";
+    return res.json(req.news);
   }
 }
