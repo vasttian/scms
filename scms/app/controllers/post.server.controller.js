@@ -89,7 +89,6 @@ module.exports = {
 
   // 获取列表
   list: function(req, res, next){
-
     req.models.post.find().exec(function(err, docs){
       if(err) return next(err);
       return res.json(docs);
