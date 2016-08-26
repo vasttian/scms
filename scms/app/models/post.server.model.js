@@ -16,7 +16,10 @@ module.exports = Waterline.Collection.extend({
       type: 'string'
     },
     createTime: {
-      type: 'Data'
+      type: 'Date'
+    },
+    deadline: {
+      type: 'Date'
     },
     address: {
       type: 'string'

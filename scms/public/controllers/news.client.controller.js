@@ -20,7 +20,8 @@ function NewsController($scope, NewsService) {
       return;
     }
     $scope.editorMessage = '';
-
+    $scope.new.deadline = $("#inputTime").val();
+    // console.log("$scope.new.deadline:",$scope.new.deadline);
     NewsService.save($scope.new).then(
       function(data){
         $("#modal-editor").modal('hide');
@@ -30,7 +31,6 @@ function NewsController($scope, NewsService) {
         $scope.editorMessage = err;
       }
       );
-    $scope.chk = false;
   };
 
   $scope.update = function() {
@@ -43,7 +43,8 @@ function NewsController($scope, NewsService) {
       return;
     }
     $scope.editorMessage = '';
-
+    $scope.current.deadline = $("#updateTime").val();
+    console.log("$scope.current.deadline:",$scope.current.deadline);
     NewsService.update($scope.id, $scope.current).then(
       function(data){
         $("#modal-update").modal('hide');
@@ -53,6 +54,7 @@ function NewsController($scope, NewsService) {
         $scope.editorMessage = err;
       }
       );
+    // console.log($("#updateTime").val());
   };
 
   $scope.createNews = function() {
@@ -64,29 +66,21 @@ function NewsController($scope, NewsService) {
     $scope.loadDetail(id);
     // console.log('openNewsDetailTitle:',$scope.current.title);
     // console.log('openNewsDetailContent:',$scope.current.content);
+
     $("#modal-detail").modal('show');
   };
 
-  $scope.deleteNews = function(id) {
-    NewsService.delete(id).then(
-      function(data) {
-        $scope.loadNews();
-      },
-      function(err) {
 
-      }
-      );
-  };
-  $scope.updateNews = function(id) {
-    $scope.loadDetail(id);
-    $scope.id = id;
-    $("#modal-update").modal('show');
+  $scope.formatTime = function(time){
+    return moment(time).format('YYYY-MM-DD HH:mm:ss');
   };
 
   $scope.loadDetail = function(id){
     NewsService.detail(id).then(
       function(data) {
         $scope.current = data;
+        // $scope.current.deadline = formatTime($scope.current.deadline);
+        // console.log('$scope.current.deadline:',$scope.current.deadline);
       },
       function(err){
 
@@ -94,8 +88,10 @@ function NewsController($scope, NewsService) {
       );
   };
 
-  $scope.formatTime = function(time){
-    return moment(time).format('YYYY-MM-DD HH:mm:ss');
+  $scope.updateNews = function(id) {
+    $scope.loadDetail(id);
+    $scope.id = id;
+    $("#modal-update").modal('show');
   };
 
   $scope.loadNews = function() {
@@ -115,33 +111,52 @@ function NewsController($scope, NewsService) {
       );
   };
 
+  $scope.deleteNews = function(id) {
+    NewsService.delete(id).then(
+      function(data) {
+        $scope.loadNews();
+      },
+      function(err) {
+
+      }
+      );
+  };
+
   $scope.check = function(cid, chk) {
     // console.log('val:',val);
     // console.log('chk:',chk);
     var val = $scope.mesId[cid];
+    console.log('1:',$scope.chk);
     if(chk) {
       id += val+",";
+    console.log('chk:',chk);
+    console.log('2:',$scope.chk);
     }
     else {
       // 替换选中后再次未选中
-      id = id.replace(val+",",""); 
+      id = id.replace(val+",","");
+      console.log('3:',$scope.chk);
+      $scope.chk = false;
     }
+    console.log('4:',$scope.chk);
     // console.log('checkedId:',id);
   };
 
   $scope.checkAll = function() {
     id = "";
+    //全选
     if(flag) {
-      for(var i = 0; i < $scope.mesId.length; i++) {
+      for(var i = 0; i < $scope.list.length; i++) {
         var val = $scope.mesId[i];
         id += val+",";
         $scope.chk = true;
+        $scope.chkk = true;
       }
       flag = false;
       $scope.checkName = "Unselect All";
     }
-    else {
-      for(var i = 0; i < $scope.mesId.length; i++) {
+    else { // 全不选
+      for(var i = 0; i < $scope.list.length; i++) {
         $scope.chk = false;
       }
       flag = true;
@@ -157,10 +172,10 @@ function NewsController($scope, NewsService) {
     for(var i = 0; i < chkId.length; i++) {
       $scope.deleteNews(chkId[i]);
     }
-    for(var i = 0; i < $scope.mesId.length; i++) {
-        $scope.chk = false;
+    for(var i = 0; i < $scope.list.length; i++) {
+      $scope.chk = false;
     }
+    $scope.checkName = "Check All";
   }
-
   $scope.loadNews();
 }

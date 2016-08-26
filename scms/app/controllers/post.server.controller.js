@@ -60,7 +60,8 @@ var getUpdateIdFromMongo = function(req, id ,cb) {
   console.log('run getUpdateIdFromMongo');
   var message = {
     title: req.body.title,
-    content: req.body.content
+    content: req.body.content,
+    deadline: new Date(req.body.deadline)
   }
   redisClient.del(REDIS_NEWS_PREFIX + id);
   redisClient.set(REDIS_NEWS_PREFIX + id, JSON.stringify(message));
@@ -78,28 +79,31 @@ module.exports = {
   create: function(req, res, next) {
     var message = {
       title: req.body.title,
-      content: req.body.content
+      content: req.body.content,
+      // createTime: new Date('2100-1-1 00:00:00'),
+      deadline: new Date(req.body.deadline)
     }
+    console.log("message:",message);
 
-    req.models.post.create(message, function(err, doc){
+    req.models.post.create(message, function(err, doc) {
       if(err) return next(err);
       return res.json(doc);
     });
   },
 
   // 获取列表
-  list: function(req, res, next){
-    req.models.post.find().exec(function(err, docs){
+  list: function(req, res, next) {
+    req.models.post.find().exec(function(err, docs) {
       if(err) return next(err);
       return res.json(docs);
     });
   },
   
   // 处理'详情'路由参数
-  getById: function(req, res, next, id){
+  getById: function(req, res, next, id) {
     // console.log('getById:',id);
     if(!id) return next(new Error('News not Found'));
-    getNewsFromRedis(req, id, function(err, doc){
+    getNewsFromRedis(req, id, function(err, doc) {
       if(err) return next(err);
 
       if(!doc) {
