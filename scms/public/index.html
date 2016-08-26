@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>News - SCMS</title>
-  <link rel="stylesheet" type="text/css" href="lib/bootstrap/dist/css/bootstrap.css">
+  <title>News - Scms</title>
+  <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css">
 </head>
 <body ng-app="webapp">
   <div class="container" ng-controller="NewsController">
@@ -14,7 +15,7 @@
     &nbsp;&nbsp;
     <button class="btn btn-primary" ng-click="mulDelete()">Mul-Delete</button>
     &nbsp;&nbsp;
-    <button class="btn btn-primary" ng-click="checkAll()">Check All</button>
+    <button class="btn btn-primary" ng-click="checkAll()">{{checkName}}</button>
     <br>
     <br>
 
@@ -22,6 +23,7 @@
     <div class = "panel panel-default">
       <div class = "panel-body">
         <div class = "col-sm-10">
+
           <div class = "row" ng-repeat = "news in list">
             <div class = "col-sm-1">
               <input type="checkbox" ng-click="check($index, chk)" ng-model="chk">
@@ -82,6 +84,12 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-sm-2 control-label">Deadline</label>
+                <div class="col-sm-10">
+                  <input type="text" id="datetimepicker" class="form-control" ng-model="" placeholder="News Deadline">
+                </div>
+              </div>
+              <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                   <button class="btn btn-primary" ng-click="save()">Save</button>
                   <span class="help-inline text-danger" ng-bind="editorMessage"></span>
@@ -127,15 +135,17 @@
         </div>
       </div>
     </div>
-
-
   </div>
-  <script type="text/javascript" src="lib/angular/angular.js"></script>
-  <script type="text/javascript" src="lib/jquery/dist/jquery.js"></script>
-  <script type="text/javascript" src="lib/bootstrap/dist/js/bootstrap.js"></script>
-  <script type="text/javascript" src="lib/moment/moment.js"></script>
-  <script type="text/javascript" src="webapp.js"></script>
-  <script type="text/javascript" src="services/news.client.service.js"></script>
-  <script type="text/javascript" src="controllers/news.client.controller.js"></script>
+  <script src="lib/angular/angular.js"></script>
+  <script src="lib/jquery/dist/jquery.js"></script>
+  <script src="lib/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="lib/moment/moment.js"></script>
+  <script src="webapp.js"></script>
+  <script src="services/news.client.service.js"></script>
+  <script src="controllers/news.client.controller.js"></script>
+  <script src="lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"></script>
+  <script>
+
+  </script>
 </body>
 </html>

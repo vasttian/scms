@@ -8,6 +8,8 @@ function NewsController($scope, NewsService) {
   $scope.id = [];
   $scope.chk = false;
   var id = "";
+  $scope.checkName = "Check All";
+  var flag = true;
   $scope.save = function() {
     if(!$scope.new.title) {
       $scope.editorMessage = 'Title is required';
@@ -28,6 +30,7 @@ function NewsController($scope, NewsService) {
         $scope.editorMessage = err;
       }
       );
+    $scope.chk = false;
   };
 
   $scope.update = function() {
@@ -67,14 +70,12 @@ function NewsController($scope, NewsService) {
   $scope.deleteNews = function(id) {
     NewsService.delete(id).then(
       function(data) {
-        // console.log('delete success');
-        //$scope.current = data;
         $scope.loadNews();
       },
       function(err) {
 
       }
-    );
+      );
   };
   $scope.updateNews = function(id) {
     $scope.loadDetail(id);
@@ -90,7 +91,7 @@ function NewsController($scope, NewsService) {
       function(err){
 
       }
-    );
+      );
   };
 
   $scope.formatTime = function(time){
@@ -130,10 +131,21 @@ function NewsController($scope, NewsService) {
 
   $scope.checkAll = function() {
     id = "";
-    for(var i = 0; i < $scope.mesId.length; i++) {
-      var val = $scope.mesId[i];
-      id += val+",";
-      $scope.chk = true;
+    if(flag) {
+      for(var i = 0; i < $scope.mesId.length; i++) {
+        var val = $scope.mesId[i];
+        id += val+",";
+        $scope.chk = true;
+      }
+      flag = false;
+      $scope.checkName = "Unselect All";
+    }
+    else {
+      for(var i = 0; i < $scope.mesId.length; i++) {
+        $scope.chk = false;
+      }
+      flag = true;
+      $scope.checkName = "Check All";
     }
     // console.log('allId:',id);
   };
@@ -144,6 +156,9 @@ function NewsController($scope, NewsService) {
     // console.log('chkId:',chkId);
     for(var i = 0; i < chkId.length; i++) {
       $scope.deleteNews(chkId[i]);
+    }
+    for(var i = 0; i < $scope.mesId.length; i++) {
+        $scope.chk = false;
     }
   }
 
