@@ -82,9 +82,7 @@ function NewsController($scope, NewsService) {
         // $scope.current.deadline = formatTime($scope.current.deadline);
         // console.log('$scope.current.deadline:',$scope.current.deadline);
       },
-      function(err){
-
-      }
+      function(err){}
       );
   };
 
@@ -100,6 +98,7 @@ function NewsController($scope, NewsService) {
         // console.log('data:');
         // console.log(data);
         $scope.list = data;
+        // $scope.checkboxes = new Array($scope.list.length);
         var MesId = [];
         for(var i = 0; i < $scope.list.length; i++) {
           MesId[i] = $scope.list[i].id;
@@ -107,7 +106,7 @@ function NewsController($scope, NewsService) {
         $scope.mesId = MesId;
         // console.log('mesId:',$scope.mesId);
       },
-      function(err){}
+      function(err) {}
       );
   };
 
@@ -116,9 +115,7 @@ function NewsController($scope, NewsService) {
       function(data) {
         $scope.loadNews();
       },
-      function(err) {
-
-      }
+      function(err) {}
       );
   };
 
@@ -126,55 +123,51 @@ function NewsController($scope, NewsService) {
     // console.log('val:',val);
     // console.log('chk:',chk);
     var val = $scope.mesId[cid];
-    console.log('1:',$scope.chk);
+    // console.log('1:',$scope.chk);
     if(chk) {
       id += val+",";
-    console.log('chk:',chk);
-    console.log('2:',$scope.chk);
+      // console.log('2:',$scope.chk);
     }
     else {
       // 替换选中后再次未选中
       id = id.replace(val+",","");
-      console.log('3:',$scope.chk);
-      $scope.chk = false;
+      // console.log('3:',$scope.chk);
+      // $scope.chk = false;
     }
-    console.log('4:',$scope.chk);
-    // console.log('checkedId:',id);
+    console.log('checkedId:',id);
   };
 
   $scope.checkAll = function() {
+    // console.log('map',$scope.list.map(function(item){return item.id}));
     id = "";
     //全选
     if(flag) {
       for(var i = 0; i < $scope.list.length; i++) {
         var val = $scope.mesId[i];
         id += val+",";
-        $scope.chk = true;
-        $scope.chkk = true;
       }
+      $scope.chk = true;
       flag = false;
       $scope.checkName = "Unselect All";
     }
     else { // 全不选
-      for(var i = 0; i < $scope.list.length; i++) {
-        $scope.chk = false;
-      }
+      $scope.chk = false;
       flag = true;
       $scope.checkName = "Check All";
     }
-    // console.log('allId:',id);
+    console.log('allId:',id);
   };
 
   $scope.mulDelete = function() {
     var chkId = id.split(",");
     var firstId = chkId.pop();//删除分割后的数组的最后一个空元素
-    // console.log('chkId:',chkId);
+    console.log('chkId:',chkId);
     for(var i = 0; i < chkId.length; i++) {
       $scope.deleteNews(chkId[i]);
     }
-    for(var i = 0; i < $scope.list.length; i++) {
-      $scope.chk = false;
-    }
+    chkId = "";
+    id = "";
+    $scope.chk = false;
     $scope.checkName = "Check All";
   }
   $scope.loadNews();
